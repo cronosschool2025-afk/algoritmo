@@ -6,29 +6,23 @@ from db_connector.database import get_db
 from db_connector.data_access import fetch_all_data_for_solver
 from solver_service.scheduler import generate_schedule_for_all_groups, ScheduleResult
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="Solver Service")
 
-# ============================================
-# CONFIGURACIÓN CORS MEJORADA
-# ============================================
 origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    # Agregar las IPs de tu red local
-    "http://192.168.1.65:5173",
-    "http://192.168.1.136:5173",
+    "https://cronos-school.up.railway.app"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ⚠️ En producción, usa la lista 'origins' específica
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
 
 @app.post("/generate")
 async def generate_schedule_endpoint(
